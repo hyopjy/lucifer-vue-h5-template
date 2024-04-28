@@ -1,78 +1,97 @@
 <template>
-  <div>
-    <van-address-list
-      v-model="chosenAddressId"
-      :list="list"
-      default-tag-text="默认"
-      @add="onAdd"
-      @edit="onEdit"
-    />
-    <div class="ceshi" @click="ceshi">
-      <img src="~@/assets/loading/loading.png" alt="">
-    </div>
+  <div class="body-d">
+
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+    >
+      <div class="totalItem" v-for="item in list" :key="item.id" >
+        <div class="link">
+          <div class="left">
+            <div class="fonts"> {{item.name}} </div>
+<!--            <div>姓名:{{item.name}}</div>-->
+            <div>电话:{{item.tel}}</div>
+          </div>
+          <div class="right">
+            <div class="jindu">工时: {{item.workDay}}/{{item.notWorkDay}}</div>
+            <span><van-icon name="arrow" color="#ccc" size="35"/></span>
+          </div>
+        </div>
+      </div>
+    </van-list>
   </div>
 </template>
 
 <script>
-import { testInteractor, testHttpInteractor } from '@/core'
+import { Toast } from 'vant'
 export default {
   name: 'Home',
   data() {
     return {
-      chosenAddressId: undefined,
-      list: [],
-      query: {
-        page: 1,
-        count: 10
-      }
+      list: [
+        {
+          id: '1',
+          code: '001',
+          name: '张三222',
+          tel: '13000000000',
+          workDay: 50,
+          notWorkDay: 10
+        },
+        {
+          id: '2',
+          code: '002',
+          name: '张三333',
+          tel: '13000000000',
+          workDay: 50,
+          notWorkDay: 10
+        }
+      ],
+      loading: false,
+      finished: false
+
     }
   },
   async created() {
-    this.$bus.on('test-change', (item) => {
-      this.getTestList(this.query)
-    })
-    this.getTestList({ page: 1, count: 10 })
   },
   methods: {
-    async ceshi() {
-      const options = {
-        a: 'b',
-        c: 'd'
-      }
-      await testHttpInteractor.getTest(options)
+    onEdit() {
+      Toast('编辑')
     },
-    onAdd() {
-      this.$router.push({ name: 'CreateTest' })
-    },
-    onEdit(item, index) {
-      this.$router.push({ name: 'EditTest', params: { id: item.id }})
-    },
-    async getTestList(query) {
-      try {
-        this.query = Object.assign({}, this.query, query)
-        const { data, total } = await testInteractor.getTestList(
-          this.query
-        )
-        this.listTotal = total
-        if (this.query.page === 1) {
-          this.list = data
-        } else {
-          this.list = [...this.list, ...data]
-        }
-      } catch (error) {
-        console.log(error)
-      }
+    onLoad() {
+      this.finished = true
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.ceshi {
-  font-size: 16px;
-  img {
-    width: 50px;
-    height: 50px;
+.body-d {
+  margin-top: 50px;
+}
+.totalItem{
+  height: 65px;
+  line-height: 65px;
+  border-bottom: 1px solid #999;
+  margin-top: 10px;
+  padding: 10px;
+  .link{
+    height: 25px;
+    line-height: 25px;
+    color: #999;
+    position: absolute;
+    .left{
+      float: left;
+      .fonts{
+        font-size: 20px;
+        font-weight:bold;
+      }
+    }
+    .right{
+      float: right;
+      margin-left: 90px;
+    }
   }
 }
 </style>
