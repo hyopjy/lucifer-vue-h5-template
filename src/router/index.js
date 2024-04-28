@@ -48,6 +48,24 @@ export const routes = [
       }
     ]
   },
+  {
+    path: '/workDate',
+    component: Layout,
+    children: [
+      {
+        path: 'detail',
+        component: () => import('@/pages/workDate/WorkDetail'),
+        name: 'WorkDateDetail',
+        meta: { title: '工时统计' }
+      },
+      {
+        path: 'fill',
+        component: () => import('@/pages/workDate/FillWorkDate.vue'),
+        name: 'FillWorkDate',
+        meta: { title: '工时填报' }
+      }
+    ]
+  },
   componentsRouter
 ]
 

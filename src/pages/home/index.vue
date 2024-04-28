@@ -7,7 +7,7 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <div class="totalItem" v-for="item in list" :key="item.id" >
+      <div class="totalItem" v-for="item in list" :key="item.id" @click = "showWorkDetail(item.id)">
         <div class="link">
           <div class="left">
             <div class="fonts"> {{item.name}} </div>
@@ -16,7 +16,7 @@
           </div>
           <div class="right">
             <div class="jindu">工时: {{item.workDay}}/{{item.notWorkDay}}</div>
-            <span><van-icon name="arrow" color="#ccc" size="35"/></span>
+<!--            <span><van-icon name="arrow" color="#ccc" size="35"/></span>-->
           </div>
         </div>
       </div>
@@ -46,6 +46,14 @@ export default {
           tel: '13000000000',
           workDay: 50,
           notWorkDay: 10
+        },
+        {
+          id: '3',
+          code: '002',
+          name: '张三333',
+          tel: '13000000000',
+          workDay: 50,
+          notWorkDay: 10
         }
       ],
       loading: false,
@@ -61,6 +69,10 @@ export default {
     },
     onLoad() {
       this.finished = true
+    },
+    showWorkDetail(id) {
+      const params = { id: id }
+      this.$router.push({ path: '/workDate/detail', query: params })
     }
   }
 }
